@@ -1,0 +1,45 @@
+{
+  "name": "@nemo-k-org/littlefs-wasm-preferences",
+  "version": "0.0.1",
+  "description": "Module for creating littlefs image, which can be read by ESP8266 lib vshymanskyy/Preferences",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "make all"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nemo-k-org/littlefs-wasm-preferences.git"
+  },
+  "homepage": "https://github.com/nemo-k-org/littlefs-wasm-preferences#readme",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.72.2",
+    "@typescript-eslint/parser": "^8.72.2",
+    "buffer": "^6.0.3",
+    "esbuild": "^0.28.2",
+    "eslint": "^8.57.1",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-node": "^11.1.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [],
+  "author": "nemo-k-org",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nemo-k-org/littlefs-wasm-preferences/issues"
+  }
+}

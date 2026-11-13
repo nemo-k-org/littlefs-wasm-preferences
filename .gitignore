@@ -1,0 +1,5 @@
+src/littlefs.js
+src/littlefs.wasm
+nemo-k-org-littlefs-wasm-preferences-*.tgz
+dist/
+node_modules/
