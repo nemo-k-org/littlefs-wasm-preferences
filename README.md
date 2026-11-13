@@ -80,5 +80,6 @@ uploadFirmwareToMicrocontroller = async (firmwareImage: any): Promise<boolean> =
 ## Creating a Release
 
 1. Set new version to `package.json`, e.g. `"version": "1.0.3"`
+1. Commit and push
 1. `git tag v1.0.3`
 1. `git push origin v1.0.3`
