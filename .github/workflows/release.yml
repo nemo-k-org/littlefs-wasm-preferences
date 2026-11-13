@@ -44,7 +44,7 @@ jobs:
           fi
 
       - name: Build
-        run: make all
+        run: make docker
 
       - name: Pack npm tarball
         run: |
