@@ -1,6 +1,6 @@
 {
   "name": "@nemo-k-org/littlefs-wasm-preferences",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Module for creating littlefs image, which can be read by ESP8266 lib vshymanskyy/Preferences",
   "type": "module",
   "main": "./dist/index.js",
