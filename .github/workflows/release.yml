@@ -43,8 +43,11 @@ jobs:
             exit 1
           fi
 
-      - name: Build
-        run: make docker
+      - name: Build WASM
+        run: make docker-wasm
+
+      - name: Build TS
+        run: make all
 
       - name: Pack npm tarball
         run: |

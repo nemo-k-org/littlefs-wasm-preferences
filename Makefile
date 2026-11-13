@@ -13,8 +13,9 @@ CFLAGS = -s MODULARIZE=1 -s 'EXPORT_NAME="littlefs"' -s EXPORT_ES6=1 -I littlefs
 	-s EXPORTED_RUNTIME_METHODS="['addFunction', 'cwrap','HEAPU8']" -s ALLOW_TABLE_GROWTH=1 -s ASSERTIONS=0 \
     -DLFS_NAME_MAX=32
 
-docker:
-	docker run --rm -v $(PWD):/src -u $(UID):$(GID) emscripten/emsdk make all
+.PHONY: docker-wasm
+docker-wasm:
+	docker run --rm -v $(PWD):/src -u $(UID):$(GID) emscripten/emsdk make src/littlefs.js
 
 dev: BUILD_MODE := dev
 dev: src/littlefs.js eslint all
