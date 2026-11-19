@@ -1,6 +1,10 @@
-interface Preference {
+import { Buffer } from 'buffer'
+
+export type PreferenceType = 'string' | 'int'
+
+export interface Preference {
   key: string;
-  value: string;
+  value: string|Buffer;
 }
 
 declare class LittleFSWASMPreferences {
@@ -17,6 +21,7 @@ declare class LittleFSWASMPreferences {
   progressWriteLine: (message: string) => void;
   putString: (key: string, value: string) => void;
   putInt: (key: string, value: number) => void;
+  put: (key: string, value: number|string, type: PreferenceType) => void;
   getLittleFSImage: () => Promise<Uint8Array>;
 }
 

@@ -4,11 +4,13 @@
 
 #include "lfs.h"
 
-lfs_t *new_lfs() {
+lfs_t *new_lfs()
+{
     return malloc(sizeof(lfs_t));
 }
 
-const struct lfs_config *new_lfs_config(void *read, void *prog, void *erase, void *sync, size_t block_count, size_t block_size, size_t prog_size) {
+const struct lfs_config *new_lfs_config(void *read, void *prog, void *erase, void *sync, size_t block_count, size_t block_size, size_t prog_size)
+{
     const struct lfs_config cfg = {
         // block device operations
         .read = read,
@@ -30,14 +32,23 @@ const struct lfs_config *new_lfs_config(void *read, void *prog, void *erase, voi
     return result;
 }
 
-void lfs_write_file(lfs_t *lfs, char *name, void *data, size_t size) {
+void lfs_write_text(lfs_t *lfs, const char *name, const char *text)
+{
+    lfs_file_t file;
+    lfs_file_open(lfs, &file, name, LFS_O_RDWR | LFS_O_CREAT);
+    lfs_file_write(lfs, &file, text, strlen(text));
+    lfs_file_close(lfs, &file);
+}
+
+void lfs_write_bytes(lfs_t *lfs, const char *name, const void *data, size_t size)
+{
     lfs_file_t file;
     lfs_file_open(lfs, &file, name, LFS_O_RDWR | LFS_O_CREAT);
     lfs_file_write(lfs, &file, data, size);
     lfs_file_close(lfs, &file);
 }
 
-int lfs_make_dir(lfs_t *lfs, const char *path) {
-  return lfs_mkdir(lfs, path);
+int lfs_make_dir(lfs_t *lfs, const char *path)
+{
+    return lfs_mkdir(lfs, path);
 }
-

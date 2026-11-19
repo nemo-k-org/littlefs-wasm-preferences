@@ -1,10 +1,7 @@
 import createLittleFS from './littlefs'
 import { Buffer } from 'buffer'
 
-interface Preference {
-  key: string,
-  value: string,
-}
+import { PreferenceType, Preference } from '.'
 
 class LittleFSWASMPreferences {
   namespace: string
@@ -39,9 +36,33 @@ class LittleFSWASMPreferences {
   }
 
   putInt = (key: string, value: number) => {
-    const buffer = Buffer.alloc(4)
+    const buffer: Buffer = Buffer.alloc(4)
     buffer.writeInt32LE(value, 0)
-    this.preferences.push({key, value: buffer.toString()})
+    this.preferences.push({key, value: buffer})
+  }
+
+  put = (key: string, value: number|string, type: PreferenceType) => {
+    if (type === 'string') {
+      if (typeof value === 'string') {
+        this.putString(key, value)
+      } else {
+        throw new Error(`littlefs-wasm-preferences: Tried to put value "${value}" of type "${typeof value}" to key "${key}"`)
+      }
+    }
+
+    if (type === 'int') {
+      if (typeof value === 'number') {
+        this.putInt(key, value)
+      } else if (typeof value === 'string') {
+        const valueNumber = +value
+        if (isNaN(valueNumber)) {
+          throw new Error(`littlefs-wasm-preferences: tried to put value "${value}" as type int, but it is not a number`)
+        }
+        this.putInt(key, valueNumber)
+      } else {
+        throw new Error(`littlefs-wasm-preferences: tried to put value "${value}" of type "${typeof value}" to key "${key}"`)
+      }
+    }
   }
 
   getLittleFSImage = async (): Promise<Uint8Array> => {
@@ -132,15 +153,32 @@ class LittleFSWASMPreferences {
     }
 
     this.progressWrite('writing files... ')
-    const fileWrite = littlefs.cwrap(
-      'lfs_write_file',
-      ['number'],
-      ['number', 'string', 'string', 'number']
+    const fileWriteText = littlefs.cwrap(
+      'lfs_write_text',
+      null,
+      ['number', 'string', 'string']
+    )
+
+    const fileWriteBytes = littlefs.cwrap(
+      'lfs_write_bytes',
+      null,
+      ['number', 'string', 'number', 'number']
     )
 
     for (const preference of this.preferences) {
       const filePath = `nvs/${this.namespace}/${preference.key}`
-      fileWrite(lfs, filePath, preference.value, preference.value.length)
+
+      if (typeof preference.value === 'string') {
+        fileWriteText(lfs, filePath, preference.value, preference.value.length)
+      } else {
+          const ptr = littlefs._malloc(preference.value.length)
+          littlefs.HEAPU8.set(preference.value, ptr)
+          try {
+            fileWriteBytes(lfs, filePath, ptr, preference.value.length)
+          } finally {
+            littlefs._free(ptr)
+          }
+      }
     }
 
     this.progressWrite('unmounting... ')

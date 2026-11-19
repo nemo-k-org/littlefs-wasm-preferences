@@ -28,6 +28,9 @@ getTestLittleFSImage = async (): Promise<Uint8Array> => {
     preferencesFS.putString('teststr', 'test string preferencesFS')
     preferencesFS.putInt('testint', 67)
 
+    const keyType: PreferenceType = 'int'
+    preferencesFS.put('testint2', 69, keyType)
+
     const image = await preferencesFS.getLittleFSImage()
 
     return image
